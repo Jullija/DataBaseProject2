@@ -16,7 +16,7 @@ const Products = () => {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching products:', err);
-        setError(err); 
+        setError(err);
         setLoading(false);
       }
     };
@@ -24,16 +24,23 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  const renderContent = () => {
+    if (loading) {
+      return <div className={styles['loading']}>...</div>;
+    }
+    if (error) {
+      return <div className={styles['loading']}>An error occurred while fetching products. Please try again.</div>;
+    }
+    return products.map((product) => <Product key={product._id} product={product} />);
+  };
+
   return (
-    <div className={styles['products']}>
-      <h1>Products</h1>
-      <div className={styles['products-container']}>
-        {loading ? (<div className={styles['loading']}>...</div>) 
-        : error  ? (<div className={styles['loading']}>An error occurred while fetching products. Please try again.</div>) 
-        : (products.map((product) => <Product key={product._id} product={product} />))
-        }
+      <div className={styles['products']}>
+        <h1>Products</h1>
+        <div className={styles['products-container']}>
+          {renderContent()}
+        </div>
       </div>
-    </div>
   );
 };
 
