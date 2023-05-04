@@ -15,8 +15,8 @@ app.use(express.json());
 
 app.get('/api/products', async (request, response) => {
     try {
-        const db = client.db('shop');
-        const productsCollection = db.collection('products');
+        const db = client.db('BitShop');
+        const productsCollection = db.collection('Products');
 
         const products = await productsCollection.find().toArray();
         response.json(products);
