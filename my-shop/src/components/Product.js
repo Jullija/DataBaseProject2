@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../styles/Product.module.css';
-
+//
 const Product = ({ product, onRemove }) => {
   return (
     <div className={styles['product']}>

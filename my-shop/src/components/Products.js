@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from '../styles/Products.module.css';
 import Product from './Product';
 
+//
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
