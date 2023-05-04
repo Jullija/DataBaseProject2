@@ -24,6 +24,16 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  const removeProduct = async (productId) => {
+    try {
+      await axios.delete(`/api/products/${productId}`);
+      setProducts(products.filter((product) => product._id !== productId));
+    } catch (err) {
+      console.error('Error removing product:', err);
+      setError(err);
+    }
+  };
+
   const renderContent = () => {
     if (loading) {
       return <div className={styles['loading']}>...</div>;
@@ -31,16 +41,16 @@ const Products = () => {
     if (error) {
       return <div className={styles['loading']}>An error occurred while fetching products. Please try again.</div>;
     }
-    return products.map((product) => <Product key={product._id} product={product} />);
+    return products.map((product) => (
+      <Product key={product._id} product={product} onRemove={removeProduct} />
+    ));
   };
 
   return (
-      <div className={styles['products']}>
-        <h1>Products</h1>
-        <div className={styles['products-container']}>
-          {renderContent()}
-        </div>
-      </div>
+    <div className={styles['product']}>
+      <h1>Products</h1>
+      <div className={styles['products-container']}>{renderContent()}</div>
+    </div>
   );
 };
 
