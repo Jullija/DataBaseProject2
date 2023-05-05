@@ -1,18 +1,19 @@
-.products {
-    width: 100%;
+.product{
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    padding: 5rem 1rem;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .products-container {
-    width: 800px;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
+
 
 .loading {
     font-size: 50px;

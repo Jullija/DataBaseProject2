@@ -4,6 +4,8 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Products from './components/Products';
 import Login from './components/Login';
+import About from './components/About';
+import Other from './components/Other';
 
 const App = () => {
   return (
@@ -13,6 +15,8 @@ const App = () => {
           <Route path="/" element={<Home />} exact />
           <Route path="/products" element={<Products />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/other" element={<Other />} />
           {/* Add more routes as needed */}
         </Routes>
     </Router>
