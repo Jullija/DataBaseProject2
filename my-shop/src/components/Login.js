@@ -28,22 +28,41 @@ const Login = () => {
         }
     };
 
-    const handleSignUpSubmit = (e) => {
+    const handleSignUpSubmit = async (e) => {
         e.preventDefault();
 
         if (!fullName || !signUpEmail || !signUpPassword) {
-            setError('Full name, email and password are required for sign up');
+            setError('Full name, email, and password are required for sign up');
             console.log(error);
             return;
         }
-        console.log('Sign UP');
-        console.log('Full Name:', fullName);
-        console.log('Email:', signUpEmail);
-        console.log('Password:', signUpPassword);
 
+        try {
+            const response = await fetch('/api/users/signup', {
+                method: 'POST', headers: {
+                    'Content-Type': 'application/json',
+                }, body: JSON.stringify({
+                    name: fullName, email: signUpEmail, password: signUpPassword,
+                }),
+            });
+
+            if (response.status === 201) {
+                const user = await response.json();
+                console.log('User signed up successfully:', user);
+
+                // Redirect the user or update the UI as needed
+            } else {
+                const errorMessage = await response.text();
+                setError(errorMessage);
+                console.log(error);
+            }
+        } catch (err) {
+            console.error('Error signing up:', err);
+            setError('Error signing up');
+        }
     };
 
-    const handleSubmit = (e) => {
+    const handleLogInSubmit = async (e) => {
         e.preventDefault();
 
         if (!email || !password) {
@@ -52,9 +71,28 @@ const Login = () => {
             return;
         }
 
-        console.log('Email:', email);
-        console.log('Password:', password);
+        try {
+            const response = await fetch('/api/users/login', {
+                method: 'POST', headers: {
+                    'Content-Type': 'application/json',
+                }, body: JSON.stringify({email, password}),
+            });
+
+            if (response.status === 200) {
+                const user = await response.json();
+                console.log('Logged in successfully:', user);
+                // Update the UI or store the user data as needed
+            } else {
+                const errorMessage = await response.text();
+                setError(errorMessage);
+                console.log('Error logging in:', errorMessage);
+            }
+        } catch (err) {
+            setError('Error logging in');
+            console.log('Error logging in:', err);
+        }
     };
+
 
     return (<div className={styles['login-container']}>
         <div className={styles.section}>
@@ -72,6 +110,7 @@ const Login = () => {
                       Sign Up
                     </span>
                             </h6>
+
                             <input
                                 className={styles.checkbox}
                                 type="checkbox"
@@ -117,7 +156,7 @@ const Login = () => {
                                                     </i>
                                                 </div>
                                                 <button type="submit" className={styles.btn + ' ' + styles.mt4}
-                                                        onClick={handleSubmit}>
+                                                        onClick={handleLogInSubmit}>
                                                     Submit
                                                 </button>
                                                 <p className={styles.mb0 + ' ' + styles.mt4 + ' '}>
@@ -143,7 +182,7 @@ const Login = () => {
                                                         onChange={handleChange}
                                                     />
                                                     <i className={styles['input-icon'] + ' ' + styles.uil + ' ' + styles['uil-user']}>
-                                                        <FaUser />
+                                                        <FaUser/>
                                                     </i>
                                                 </div>
                                                 <div className={styles['form-group'] + ' ' + styles.mt2}>
@@ -158,7 +197,7 @@ const Login = () => {
                                                         onChange={handleChange}
                                                     />
                                                     <i className={styles['input-icon'] + ' ' + styles.uil + ' ' + styles['uil-at']}>
-                                                        <FaEnvelope />
+                                                        <FaEnvelope/>
                                                     </i>
                                                 </div>
                                                 <div className={styles['form-group'] + ' ' + styles.mt2}>
@@ -173,10 +212,11 @@ const Login = () => {
                                                         onChange={handleChange}
                                                     />
                                                     <i className={styles['input-icon'] + ' ' + styles.uil + ' ' + styles['uil-lock-alt']}>
-                                                        <FaLock />
+                                                        <FaLock/>
                                                     </i>
                                                 </div>
-                                                <button type="submit" className={styles.btn + ' ' + styles.mt4} onClick={handleSignUpSubmit}>
+                                                <button type="submit" className={styles.btn + ' ' + styles.mt4}
+                                                        onClick={handleSignUpSubmit}>
                                                     Submit
                                                 </button>
                                             </div>
