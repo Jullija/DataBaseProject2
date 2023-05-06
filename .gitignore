@@ -1,9 +1,9 @@
 .DS_STORE
 .env
 ./backend/node_modules
-./my-shop/node_modules
+frontend/node_modules
 backend/node_modules/
-my-shop/node_modules/
+frontend/node_modules/
 scripts/flow/*/.flowconfig
 .flowconfig
 *~

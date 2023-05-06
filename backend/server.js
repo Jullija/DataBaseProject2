@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import mongodb from 'mongodb';
 import session from 'express-session';
+import {hashPassword, verifyPassword} from './module/password.js';
+
 
 dotenv.config();
 
@@ -13,7 +15,7 @@ const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: 
 
 app.use(express.json());
 app.use(session({
-    secret: 'your_secret_key', // Replace with a strong secret key
+    secret: process.env.SESSION_SECRET,
     resave: false, saveUninitialized: true, cookie: {secure: false} // Set to 'true' in production when using HTTPS
 }));
 
@@ -49,7 +51,7 @@ app.delete('/api/products/:productId', async (request, response) => {
 });
 
 app.post('/api/users/signup', async (request, response) => {
-    const {name, email, password} = request.body;
+    const { name, email, password } = request.body;
 
     if (!name || !email || !password) {
         response.status(400).send('Full name, email, and password are required for sign up');
@@ -60,14 +62,17 @@ app.post('/api/users/signup', async (request, response) => {
         const db = client.db('BitShop');
         const usersCollection = db.collection('Users');
 
-        const existingUser = await usersCollection.findOne({email});
+        const existingUser = await usersCollection.findOne({ email });
         if (existingUser) {
             response.status(409).send('An account with this email already exists');
             return;
         }
 
+        const hashedPassword = await hashPassword(password);
         const newUser = {
-            name, email, password, // Note: It's highly recommended to hash the password before storing it in the database
+            name,
+            email,
+            password: hashedPassword,
         };
 
         const result = await usersCollection.insertOne(newUser);
@@ -80,7 +85,7 @@ app.post('/api/users/signup', async (request, response) => {
 });
 
 app.post('/api/users/login', async (request, response) => {
-    const {email, password} = request.body;
+    const { email, password } = request.body;
 
     if (!email || !password) {
         response.status(400).send('Email and password are required for login');
@@ -91,19 +96,18 @@ app.post('/api/users/login', async (request, response) => {
         const db = client.db('BitShop');
         const usersCollection = db.collection('Users');
 
-        const user = await usersCollection.findOne({email});
+        const user = await usersCollection.findOne({ email });
         if (!user) {
             response.status(404).send('User not found');
             return;
         }
 
-        // Compare the provided password with the stored one (use bcrypt to compare hashed passwords)
-        if (password !== user.password) {
+        const isPasswordCorrect = await verifyPassword(password, user.password);
+        if (!isPasswordCorrect) {
             response.status(401).send('Invalid password');
             return;
         }
 
-        // Create a session for the logged-in user
         request.session.userId = user._id;
         response.status(200).json(user);
     } catch (err) {
