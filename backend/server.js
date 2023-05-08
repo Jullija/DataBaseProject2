@@ -49,6 +49,44 @@ app.delete('/api/products/:productId', async (request, response) => {
         response.status(500).send('Error connecting to the database');
     }
 });
+app.post('/api/products', async (request, response) => {
+    const { product_name, product_price, product_type,image_link, product_description  } = request.body;
+
+    if (!product_name|| !product_price || !product_type|| !image_link || !product_description) {
+        response.status(400).send('you need to fill out form before adding to database');
+        return;
+    }
+    try {
+     
+      const db = client.db('BitShop');
+      const productsCollection = db.collection('Products');
+      const maxIdProduct = await productsCollection.aggregate([
+        { $sort: { product_id: -1 } },
+        { $limit: 1 }
+      ]).toArray();
+      
+      const product_id = maxIdProduct[0].product_id + 1;
+  
+      const newProduct = {
+        product_name,
+        product_id,
+        product_price,
+        product_type,
+        product_description,
+        image_link
+      };
+      console.log(newProduct);
+  
+    const result = await productsCollection.insertOne(newProduct);
+    console.log(result);
+    const addedProduct = await productsCollection.findOne({_id: result.insertedId});
+    response.status(201).json(addedProduct);
+
+    } catch (err) {
+      console.error(err);
+      response.status(500).send('Error connecting to the database');
+    }
+  });
 
 app.post('/api/users/signup', async (request, response) => {
     const { name, email, password } = request.body;
