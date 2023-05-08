@@ -1,0 +1,96 @@
+.form-container {
+    position: relative;
+
+  }
+  
+  .form-open-btn {
+    position: fixed;
+    background-color: #4caf50;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    display: block;
+    right: 0;
+    top: 10%;
+  }
+  
+  .form-panel {
+    background-color: #fff;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    display: none;
+    height: 60%;
+    overflow: auto;
+    padding: 1rem;
+    position: fixed;
+    right: 0;
+    top: 10%;
+    transition: transform 0.3s ease-in-out;
+    width: 400px;
+    z-index: 9999;
+  }
+  
+  .form-panel.open {
+    display: block;
+  }
+  
+  .form-panel h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+  
+  .form-row label {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-row input,
+  .form-row textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .form-row input:focus,
+  .form-row textarea:focus {
+    border-color: #4caf50;
+    outline: none;
+  }
+  
+  .form-row textarea {
+    min-height: 100px;
+  }
+  
+  .form-row label input[type="checkbox"] {
+    margin-right: 0.5rem;
+  }
+  .close-button{
+    border: none;
+    background-color: inherit;
+    box-shadow: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: large;
+    position: absolute;
+    right: 0;
+    padding: 0.75rem;
+    top: 0;
+    margin: 0;
+    width: auto;
+    height: auto;
+    color: #ccc;
+    
+  }
+  .close-button:hover{
+    border: none;
+    background-color: inherit;
+    box-shadow: none;
+    color: black;
+  }

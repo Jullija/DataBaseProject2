@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../styles/Products.module.css';
 import Product from './Product';
+import AddForm from './AddForm';
 
 //
 const Products = () => {
@@ -47,9 +48,14 @@ const Products = () => {
     ));
   };
 
+  const AddProduct = (newProduct)=>{
+    setProducts([...products, newProduct]);
+  }
+
   return (
     <div className={styles['product']}>
       <h1>Products</h1>
+      <AddForm AddProduct={AddProduct}/>
       <div className={styles['products-container']}>{renderContent()}</div>
     </div>
   );
