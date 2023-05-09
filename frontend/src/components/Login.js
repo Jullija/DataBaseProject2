@@ -106,7 +106,7 @@ const Login = () => {
                     <span id="login" className={glowingSpan === 'login' ? styles.glowing : ''}>
                       Log In
                     </span>
-                                <span id="signup" className={glowingSpan === 'signup' ? styles.glowing : ''}>
+                    <span id="signup" className={glowingSpan === 'signup' ? styles.glowing : ''}>
                       Sign Up
                     </span>
                             </h6>

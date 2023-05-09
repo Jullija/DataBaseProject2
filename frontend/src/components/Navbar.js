@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
 
     <div className={styles.nav}>
-        <button onClick={getCurrentUser}>
+        <button onClick={getCurrentUser} >
             get curr user - test for now
         </button>
         <button onClick={logOutUser}>Log Out</button>
