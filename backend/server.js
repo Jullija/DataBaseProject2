@@ -193,6 +193,49 @@ app.post('/api/users/logout', (request, response) => {
     });
 });
 
+app.patch('/api/products/:productId', async (request, response) => {
+    console.log('PATCH /api/products/:productId');
+    const { productId } = request.params;
+    const updateObject = request.body;
+
+    if (!updateObject || typeof updateObject !== 'object' || Object.keys(updateObject).length === 0 ) 
+    {
+        response.status(400).send('You must provide an object to update the product');
+        return;
+    }
+
+    try {
+        const db = client.db('BitShop');
+        const productsCollection = db.collection('Products');
+
+        const product = await productsCollection.findOne({ _id: new ObjectId(productId) });
+        if (!product) {
+            response.status(404).send('Product not found');
+            return;
+        }
+
+        // If the update object includes product_quantity, do a quantity check
+        if (updateObject.product_quantity) {
+            const newQuantity = product.product_quantity + updateObject.product_quantity;
+            updateObject.product_quantity = Math.max(0,newQuantity);
+        }
+        console.log(updateObject);
+        console.log(product);
+
+        await productsCollection.updateOne(
+            { _id: new ObjectId(productId) },
+            { $set: updateObject }
+        );
+        console.log(updateObject);
+        console.log(product);
+
+        response.status(200).send(updateObject);
+    } catch (err) {
+        console.error(err);
+        response.status(500).send('Error connecting to the database');
+    }
+});
+
 
 (async () => {
     try {
