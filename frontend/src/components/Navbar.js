@@ -28,6 +28,7 @@ const Navbar = () => {
         <Link to="/products">Products</Link>
         <Link to="/login">Login</Link>
         <Link to="/other">Other</Link>
+        <Link to="/cart">Cart</Link>
         {/* Add more links as needed */}
       </div>
     </div>

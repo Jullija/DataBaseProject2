@@ -4,6 +4,7 @@ import styles from '../styles/Products.module.css';
 import Product from './Product';
 import AddForm from './AddForm';
 
+
 //
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -36,27 +37,10 @@ const Products = () => {
     }
   };
 
-  const buyProduct = async (productId) => {
-    try {
-      await axios.put(`/api/products/${productId}`);
-      setProducts(
-        products.map((product) => {
-          if (product._id === productId) {
-            // product.quantity -= 1;
-            console.log(product._quantity);
-          }
-          return product;
-        })
-    );
-    
-    } catch (err) {
-      console.error('Error buying product:', err);
-      setError(err);
-    }
-  };
 
   const updateProductQuantity = async (productId, changeInQuantity) => {
     try {
+      
       const res = await axios.patch(`/api/products/${productId}`, { product_quantity: changeInQuantity });
 
       // Update products in state

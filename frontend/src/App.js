@@ -6,6 +6,7 @@ import Products from './components/Products';
 import Login from './components/Login';
 import About from './components/About';
 import Other from './components/Other';
+import Cart from './components/Cart';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/other" element={<Other />} />
+          <Route path="/cart" element={<Cart />} />
           {/* Add more routes as needed */}
         </Routes>
     </Router>
