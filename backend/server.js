@@ -3,6 +3,8 @@ import express from 'express';
 import mongodb from 'mongodb';
 import session from 'express-session';
 import {hashPassword, verifyPassword} from './module/password.js';
+"use strict"
+
 
 
 dotenv.config();
@@ -50,6 +52,7 @@ app.delete('/api/products/:productId', async (request, response) => {
     }
 });
 app.post('/api/products', async (request, response) => {
+    
     const { product_name, product_price, product_type,image_link, product_description  } = request.body;
 
     if (!product_name|| !product_price || !product_type|| !image_link || !product_description) {
@@ -75,10 +78,10 @@ app.post('/api/products', async (request, response) => {
         product_description,
         image_link
       };
-      console.log(newProduct);
+    //   console.log(newProduct);
   
     const result = await productsCollection.insertOne(newProduct);
-    console.log(result);
+    // console.log(result);
     const addedProduct = await productsCollection.findOne({_id: result.insertedId});
     response.status(201).json(addedProduct);
 
@@ -87,6 +90,56 @@ app.post('/api/products', async (request, response) => {
       response.status(500).send('Error connecting to the database');
     }
   });
+
+app.post('/api/users/buy/:name', async (request, response) => {
+
+    
+
+    const { product_id, product_quantity,user_id } = request.body;
+    
+    // console.log(request.body)
+    // console.log(product_id, user_id, product_quantity)
+
+    if (!product_id|| !user_id || !product_quantity) {
+        // console.log(product_id, user_id, product_quantity)
+        response.status(400).send('you need to fill out form before adding to database');
+        return;
+    }
+    try {
+     
+      const db = client.db('BitShop');
+      const productsCollection = db.collection('Products');
+      let historyProduct = productsCollection.aggregate([
+        {
+          $match: { product_id: product_id }
+        },
+        {
+          $project: {
+            _id: 1, 
+            product_id: 1,
+            product_name: 1,
+            product_price: 1,
+            product_type: 1,
+            product_description: 0,
+            quantity: 1,
+            // date: { $toDate: "$$NOW" }
+          }
+        }
+      ]);
+    console.log("2");
+    console.log(historyProduct);
+    const userCollection = db.collection('Users');
+    const result = await userCollection.updateOne({_id: new ObjectId(user_id)},{$push:{history:historyProduct}})
+
+    // console.log(result);
+    response.status(201).json(result);
+
+    } catch (err) {
+      console.error(err);
+      response.status(500).send('Error connecting to the database');
+    }
+  });
+
 
 app.post('/api/users/signup', async (request, response) => {
     const { name, email, password } = request.body;
@@ -219,15 +272,15 @@ app.patch('/api/products/:productId', async (request, response) => {
             const newQuantity = product.product_quantity + updateObject.product_quantity;
             updateObject.product_quantity = Math.max(0,newQuantity);
         }
-        console.log(updateObject);
-        console.log(product);
+        // console.log(updateObject);
+        // console.log(product);
 
         await productsCollection.updateOne(
             { _id: new ObjectId(productId) },
             { $set: updateObject }
         );
-        console.log(updateObject);
-        console.log(product);
+        // console.log(updateObject);
+        // console.log(product);
 
         response.status(200).send(updateObject);
     } catch (err) {
