@@ -109,23 +109,19 @@ app.post('/api/users/buy/:name', async (request, response) => {
      
       const db = client.db('BitShop');
       const productsCollection = db.collection('Products');
-      let historyProduct = productsCollection.aggregate([
-        {
-          $match: { product_id: product_id }
-        },
-        {
-          $project: {
-            _id: 1, 
-            product_id: 1,
+      const historyProduct = await productsCollection.findOne(
+        {_id: new ObjectId(product_id)},
+        { product_id: 1,
             product_name: 1,
             product_price: 1,
             product_type: 1,
             product_description: 0,
-            quantity: 1,
-            // date: { $toDate: "$$NOW" }
-          }
-        }
-      ]);
+            quantity: 1, }
+      );
+      if(historyProduct){
+        historyProduct.date= new Date();
+      }
+      
     console.log("2");
     console.log(historyProduct);
     const userCollection = db.collection('Users');
