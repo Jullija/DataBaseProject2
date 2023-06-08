@@ -110,7 +110,7 @@ app.post('/api/users/buy/:name', async (request, response) => {
      
       const db = client.db('BitShop');
       const productsCollection = db.collection('Products');
-      const historyProduct = await productsCollection.findOne(
+      const basketProduct = await productsCollection.findOne(
         {_id: new ObjectId(product_id)},
         { product_id: 1,
             product_name: 1,
@@ -119,14 +119,14 @@ app.post('/api/users/buy/:name', async (request, response) => {
             product_description: 0,
             quantity: 1, }
       );
-      if(historyProduct){
-        historyProduct.date= new Date();
+      if (basketProduct) {
+        basketProduct.date= new Date();
       }
       
-    console.log("2");
-    console.log(historyProduct);
+    console.log(basketProduct);
     const userCollection = db.collection('Users');
-    const result = await userCollection.updateOne({_id: new ObjectId(user_id)},{$push:{history:historyProduct}})
+    // Update basket
+    const result = await userCollection.updateOne({_id: new ObjectId(user_id)},{$push:{basket:basketProduct}})
 
     // console.log(result);
     response.status(201).json(result);
@@ -309,6 +309,45 @@ app.get('/api/users/:userId/basket', async (request, response) => {
         response.status(500).send('Error connecting to the database');
     }
 });
+
+app.post('/api/users/purchase/:userId', async (request, response) => {
+    try {
+      const {userId} = request.params;
+      const {basket, history} = request.body;
+      const db = client.db('BitShop');
+      const usersCollection = db.collection('Users');
+  
+      // Find the user with the provided ID
+      const user = await usersCollection.findOne({_id: new ObjectId(userId)});
+      if (!user) {
+        response.status(404).send('User not found');
+        return;
+      }
+  
+      // Update user's basket and history
+      const updateResult = await usersCollection.updateOne(
+        {_id: new ObjectId(userId)},
+        {
+          $set: {
+            basket: basket,
+          },
+          $push: {
+            history: {$each: history},
+          },
+        }
+      );
+  
+      if (updateResult.modifiedCount === 0) {
+        response.status(404).send('Failed to update user');
+        return;
+      }
+  
+      response.status(200).send('Purchase successful');
+    } catch (err) {
+      console.error(err);
+      response.status(500).send('Error connecting to the database');
+    }
+  });
 
 
 (async () => {

@@ -20,8 +20,8 @@ const Product = ({ product, onRemove, onBuy }) => {
       <p className={styles['p']}>{product.product_type}</p>
       <p>${product.product_price}</p>
       <p>{product.product_description}</p>
-      <p>Quantity: {product.product_quantity}</p>
-      {isLoggedInStatus && <div className={styles['button']} onClick={() => onBuy(product._id, -1)}>BUY</div>}
+      {product.product_quantity !== 0 ? <p> Quantity: {product.product_quantity} </p> : <p> OUT OF STOCK </p>}
+      {isLoggedInStatus && product.product_quantity > 0 && <div className={styles['button']} onClick={() => onBuy(product._id, -1)}>BUY</div>}
       <button onClick={() => onRemove(product._id)} className={styles['button']}>Remove</button>
     </div>
   );

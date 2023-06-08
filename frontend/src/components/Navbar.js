@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from '../styles/Navbar.module.css';
-import {getCurrentUser, logOutUser, isLoggedIn} from "../modules/user";
+import { logOutUser, isLoggedIn } from "../modules/user";
 import React, { useState, useEffect } from 'react';
 
 const Navbar = () => {
@@ -17,9 +17,9 @@ const Navbar = () => {
 
   return (
     <div className={styles.nav}>
-        <button onClick={getCurrentUser} >
+        {/*<button onClick={getCurrentUser} >
             get curr user - test for now
-        </button>
+        </button>*/}
       <input type="checkbox" id={styles['nav-check']} />
       <div className={styles['nav-header']}>
         <div className={styles['nav-title']}>Bit Shop</div>
