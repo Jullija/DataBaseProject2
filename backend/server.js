@@ -51,6 +51,7 @@ app.delete('/api/products/:productId', async (request, response) => {
         response.status(500).send('Error connecting to the database');
     }
 });
+
 app.post('/api/products', async (request, response) => {
     
     const { product_name, product_price, product_type,image_link, product_description  } = request.body;
@@ -279,6 +280,30 @@ app.patch('/api/products/:productId', async (request, response) => {
         // console.log(product);
 
         response.status(200).send(updateObject);
+    } catch (err) {
+        console.error(err);
+        response.status(500).send('Error connecting to the database');
+    }
+});
+
+app.get('/api/users/:userId/basket', async (request, response) => {
+    try {
+        const {userId} = request.params;
+        const db = client.db('BitShop');
+        const usersCollection = db.collection('Users');
+
+        const user = await usersCollection.findOne({_id: new ObjectId(userId)});
+        if (!user) {
+            response.status(404).send('User not found');
+            return;
+        }
+
+        if (!user.basket) {
+            response.status(404).send('Basket not found');
+            return;
+        }
+
+        response.status(200).json(user.basket);
     } catch (err) {
         console.error(err);
         response.status(500).send('Error connecting to the database');

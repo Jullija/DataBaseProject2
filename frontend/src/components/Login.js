@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import styles from '../styles/Login.module.css';
 import ParticleAnimation from './ParticleAnimation';
 import {FaLock, FaUser, FaEnvelope} from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
@@ -12,6 +13,8 @@ const Login = () => {
     const [fullName, setFullName] = useState('');
     const [error, setError] = useState('');
     const [glowingSpan, setGlowingSpan] = useState('login');
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -49,8 +52,8 @@ const Login = () => {
             if (response.status === 201) {
                 const user = await response.json();
                 console.log('User signed up successfully:', user);
-
-                // Redirect the user or update the UI as needed
+                navigate('/');
+                window.location.reload();
             } else {
                 const errorMessage = await response.text();
                 setError(errorMessage);
@@ -81,7 +84,8 @@ const Login = () => {
             if (response.status === 200) {
                 const user = await response.json();
                 console.log('Logged in successfully:', user);
-                // Update the UI or store the user data as needed
+                navigate('/');
+                window.location.reload();
             } else {
                 const errorMessage = await response.text();
                 setError(errorMessage);
@@ -94,7 +98,8 @@ const Login = () => {
     };
 
 
-    return (<div className={styles['login-container']}>
+    return (
+    <div className={styles['login-container']}>
         <div className={styles.section}>
             <div className={styles.container}>
                 <div className={styles.row + ' ' + styles['full-height'] + ' ' + styles['justify-content-center']}>
@@ -103,12 +108,12 @@ const Login = () => {
                         <div
                             className={styles.section + ' ' + styles.pb5 + ' ' + styles.pt5 + ' ' + styles['pt-sm-2'] + ' ' + styles['text-center']}>
                             <h6 className={styles.mb0 + ' ' + styles.pb3}>
-                    <span id="login" className={glowingSpan === 'login' ? styles.glowing : ''}>
-                      Log In
-                    </span>
-                    <span id="signup" className={glowingSpan === 'signup' ? styles.glowing : ''}>
-                      Sign Up
-                    </span>
+                                <span id="login" className={glowingSpan === 'login' ? styles.glowing : ''}>
+                                    Log In
+                                </span>
+                                <span id="signup" className={glowingSpan === 'signup' ? styles.glowing : ''}>
+                                    Sign Up
+                                </span>
                             </h6>
 
                             <input

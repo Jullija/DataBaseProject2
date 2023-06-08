@@ -1,16 +1,25 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../styles/Navbar.module.css';
-import {getCurrentUser, logOutUser} from "../modules/user";
+import {getCurrentUser, logOutUser, isLoggedIn} from "../modules/user";
+import React, { useState, useEffect } from 'react';
 
 const Navbar = () => {
-  return (
+  const [isLoggedInStatus, setIsLoggedInStatus] = useState(false);
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const status = await isLoggedIn();
+      setIsLoggedInStatus(status);
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  return (
     <div className={styles.nav}>
         <button onClick={getCurrentUser} >
             get curr user - test for now
         </button>
-        <button onClick={logOutUser}>Log Out</button>
       <input type="checkbox" id={styles['nav-check']} />
       <div className={styles['nav-header']}>
         <div className={styles['nav-title']}>Bit Shop</div>
@@ -26,9 +35,13 @@ const Navbar = () => {
         <Link to="/">Home</Link>
         <Link to="/about">About us</Link>
         <Link to="/products">Products</Link>
-        <Link to="/login">Login</Link>
+        {isLoggedInStatus ?
+            <Link to="" onClick={logOutUser}>Log Out</Link>
+            :
+            <Link to="/login">Login</Link>
+        }
+        {isLoggedInStatus && <Link to="/cart">Cart</Link>}
         <Link to="/other">Other</Link>
-        <Link to="/cart">Cart</Link>
         {/* Add more links as needed */}
       </div>
     </div>

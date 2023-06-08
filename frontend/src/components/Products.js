@@ -3,7 +3,7 @@ import axios from 'axios';
 import styles from '../styles/Products.module.css';
 import Product from './Product';
 import AddForm from './AddForm';
-import {getCurrentUser} from '../modules/user.js';
+import { getCurrentUser } from '../modules/user.js';
 
 
 //
@@ -47,7 +47,7 @@ const Products = () => {
       // Update products in state
       setProducts(products.map((product) => {
         if (product._id === productId) {
-          console.log(res.data);
+          // console.log(res.data);
           product.product_quantity = res.data.product_quantity;
           return product;
         }
@@ -65,7 +65,7 @@ const Products = () => {
     try {
       await updateProductQuantity(productId, changeInQuantity);
       const user = await getCurrentUser();
-      console.log(user._id,productId,changeInQuantity);
+      // console.log(user._id,productId,changeInQuantity);
       const response = await axios.post(`api/users/buy/${user._id}`, { product_id: productId,product_quantity: changeInQuantity,user_id: user._id });
       console.log(response);
     } catch (err) {
