@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getBasketItems, getCurrentUser } from "../modules/user";
 import axios from 'axios';
+import styles from '../styles/Cart.module.css';
 
 const Cart = () => {
   const [items, setItems] = useState([]);
@@ -36,21 +37,22 @@ const Cart = () => {
   };
 
   return (
-    <div>
-      <h2>Your Cart</h2>
-      {items.length === 0 ? (
-        <p>Your cart is empty</p>
-      ) : (
-        <>
-          <ul>
+    <div className={styles['cart']}>
+      <h1>Your Cart</h1>
+      {items.length === 0 ? 
+      (<p>Your cart is empty</p>) : 
+      (<>
+        <div className={styles['cart-container']}>
             {items.map((item, index) => (
-              <li key={index}>
-                Item: {item.product_name}
-              </li>
+              <div key={index} className={styles['cart-item']}>
+                <p2>Name: {item.product_name} </p2>
+                <p2>Price: {item.product_price} </p2>
+                <p2>Type: {item.product_type} </p2>
+              </div>
             ))}
-          </ul>
-          <button onClick={handlePurchase}>Purchase Items</button>
-        </>
+        </div>
+        <button className={styles['cart-button']} onClick={handlePurchase}>Purchase Items</button>
+      </>
       )}
     </div>
   );

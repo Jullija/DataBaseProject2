@@ -70,14 +70,16 @@ app.post('/api/products', async (request, response) => {
       ]).toArray();
       
       const product_id = maxIdProduct[0].product_id + 1;
+      const product_quantity_parsed= parseInt(product_quantity);
+      const product_price_parsed = parseFloat(product_price);
   
       const newProduct = {
         product_name,
         product_id,
-        product_price,
+        product_price_parsed,
         product_type,
         product_description,
-        product_quantity,
+        product_quantity_parsed,
         image_link
       };
     //   console.log(newProduct);
