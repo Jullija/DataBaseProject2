@@ -54,7 +54,7 @@ app.delete('/api/products/:productId', async (request, response) => {
 
 app.post('/api/products', async (request, response) => {
     
-    const { product_name, product_price, product_type,image_link, product_quantity,product_description  } = request.body;
+    let { product_name, product_price, product_type,image_link, product_quantity,product_description  } = request.body;
 
     if (!product_name|| !product_price || !product_type|| !image_link || !product_description || !product_quantity) {
         response.status(400).send('you need to fill out form before adding to database');
@@ -70,16 +70,20 @@ app.post('/api/products', async (request, response) => {
       ]).toArray();
       
       const product_id = maxIdProduct[0].product_id + 1;
-      const product_quantity_parsed= parseInt(product_quantity);
-      const product_price_parsed = parseFloat(product_price);
+    //   let tmp={first:parseInt(product_quantity),second:parseInt(product_price)}
+      
+    product_price= parseFloat(product_price);
+    product_quantity= parseInt(product_quantity);
+      
+        
   
       const newProduct = {
         product_name,
         product_id,
-        product_price_parsed,
+        product_price,
         product_type,
         product_description,
-        product_quantity_parsed,
+        product_quantity,
         image_link
       };
     //   console.log(newProduct);
