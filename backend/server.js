@@ -287,6 +287,33 @@ app.patch('/api/products/:productId', async (request, response) => {
     }
 });
 
+app.get('/api/products/sort', async (request, response) => {
+    console.log('GET /api/products/sort');
+    console.log(request.query);
+    
+    const  strategy  = request.query;
+    console.log(strategy);
+
+
+    if (!strategy) 
+    {
+        response.status(400).send('You must provide an object to update the product');
+        return;
+    }
+    try {
+        const db = client.db('BitShop');
+        const productsCollection = db.collection('Products');
+
+        const products = await productsCollection.find().sort(strategy).toArray();  
+        console.log(products);
+        response.json(products);
+    } catch (err) {
+        console.error(err);
+        response.status(500).send('Error connecting to the database');
+    }
+
+});
+
 app.get('/api/users/:userId/basket', async (request, response) => {
     try {
         const {userId} = request.params;

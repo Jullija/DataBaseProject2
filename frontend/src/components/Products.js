@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../styles/Products.module.css';
+import styles2 from '../styles/Product.module.css';
 import Product from './Product';
 import AddForm from './AddForm';
 import { getCurrentUser } from '../modules/user.js';
@@ -90,10 +91,20 @@ const Products = () => {
     setProducts([...products, newProduct]);
   }
 
+  const sortPrice = async (strategy) => {
+    console.log(strategy);
+    const response = await axios.get('/api/products/sort', { params: strategy });
+    console.log(response.data);
+    setProducts(response.data);
+    
+  };
+
   return (
     <div className={styles['product']}>
       <h1>Products</h1>
       <AddForm AddProduct={AddProduct}/>
+      <button className={styles2['button']}  onClick={() =>sortPrice({product_price:1})}>Low Price</button>
+      <button className={styles2['button']}  onClick={() =>sortPrice({product_price:-1})}>High Proce</button>
       <div className={styles['products-container']}>{renderContent()}</div>
     </div>
   );
