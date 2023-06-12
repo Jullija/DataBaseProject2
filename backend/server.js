@@ -54,9 +54,9 @@ app.delete('/api/products/:productId', async (request, response) => {
 
 app.post('/api/products', async (request, response) => {
     
-    const { product_name, product_price, product_type,image_link, product_description  } = request.body;
+    const { product_name, product_price, product_type,image_link, product_quantity,product_description  } = request.body;
 
-    if (!product_name|| !product_price || !product_type|| !image_link || !product_description) {
+    if (!product_name|| !product_price || !product_type|| !image_link || !product_description || !product_quantity) {
         response.status(400).send('you need to fill out form before adding to database');
         return;
     }
@@ -77,6 +77,7 @@ app.post('/api/products', async (request, response) => {
         product_price,
         product_type,
         product_description,
+        product_quantity,
         image_link
       };
     //   console.log(newProduct);

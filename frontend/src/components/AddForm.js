@@ -10,6 +10,7 @@ const AddForm = (props) => {
       name: '',
       price: '',
       type: '',
+      quantity: '',
       imageLink: '',
       description: '',
       subscribe: false,
@@ -38,6 +39,7 @@ const AddForm = (props) => {
             product_price: formValues.price,
             product_type: formValues.type,
             image_link: formValues.imageLink,
+            product_quantity: formValues.quantity,
             product_description: formValues.description
           };
         const response = await axios.post('/api/products', newProduct);
@@ -79,6 +81,16 @@ const AddForm = (props) => {
                 name="price"
                 id="price"
                 value={formValues.price}
+                onChange={handleChange}
+              />
+            </div>
+            <div className={styles['form-row']}>
+              <label htmlFor="quantity">Quantity</label>
+              <input
+                type="number"
+                name="quantity"
+                id="quantity"
+                value={formValues.quantity}
                 onChange={handleChange}
               />
             </div>
