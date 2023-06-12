@@ -91,7 +91,7 @@ const Products = () => {
     setProducts([...products, newProduct]);
   }
 
-  const sortPrice = async (strategy) => {
+const sortPrice = async (strategy) => {
     console.log(strategy);
     const response = await axios.get('/api/products/sort', { params: strategy });
     console.log(response.data);
@@ -99,15 +99,20 @@ const Products = () => {
     
   };
 
+
   return (
     <div className={styles['product']}>
       <h1>Products</h1>
       <AddForm AddProduct={AddProduct}/>
+      <div className={styles['product-header']}>
       <button className={styles2['button']}  onClick={() =>sortPrice({product_price:1})}>Low Price</button>
-      <button className={styles2['button']}  onClick={() =>sortPrice({product_price:-1})}>High Proce</button>
+      <button className={styles2['button']}  onClick={() =>sortPrice({product_price:-1})}>High Price</button>
+      <button className={styles2['button']}>Available</button>
+      </div>
       <div className={styles['products-container']}>{renderContent()}</div>
     </div>
   );
 };
 
 export default Products;
+

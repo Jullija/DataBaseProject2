@@ -1,5 +1,7 @@
 import React from 'react';
 import styles from '../styles/CardList.module.scss';
+import { Link } from 'react-router-dom';
+import Products from './Products';
 
 const cards = [
   {
@@ -29,7 +31,7 @@ const Card = ({ title, copy, button }) => (
       <div className={styles.content}>
         <h2 className={styles.title}>{title}</h2>
         <p className={styles.copy}>{copy}</p>
-        <button className={styles.btn}>{button}</button>
+        <button className={styles.btn}>  <Link to="/products">{button}</Link> </button>
       </div>
     </div>
 );
