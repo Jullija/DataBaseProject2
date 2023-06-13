@@ -1,25 +1,29 @@
 import { Link } from 'react-router-dom';
 import styles from '../styles/Navbar.module.css';
-import { logOutUser, isLoggedIn } from "../modules/user";
+import { logOutUser, isLoggedIn,getCurrentUser } from "../modules/user";
 import React, { useState, useEffect } from 'react';
+
 
 const Navbar = () => {
   const [isLoggedInStatus, setIsLoggedInStatus] = useState(false);
+  const [currentUser, setCurrentUser] = useState('');
 
   useEffect(() => {
     const checkLoginStatus = async () => {
       const status = await isLoggedIn();
       setIsLoggedInStatus(status);
+      const user = await getCurrentUser(); // Przykładowe pobranie użytkownika
+      setCurrentUser(user.name);
     };
 
     checkLoginStatus();
   }, []);
 
+
+
   return (
     <div className={styles.nav}>
-        {/*<button onClick={getCurrentUser} >
-            get curr user - test for now
-        </button>*/}
+    
       <input type="checkbox" id={styles['nav-check']} />
       <div className={styles['nav-header']}>
         <div className={styles['nav-title']}>Bit Shop</div>
@@ -42,7 +46,7 @@ const Navbar = () => {
         }
         {isLoggedInStatus && <Link to="/cart">Cart</Link>}
         <Link to="/other">Other</Link>
-        {/* Add more links as needed */}
+        {isLoggedInStatus && <Link to="/#">{currentUser}</Link>}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../styles/CardList.module.scss';
 import { Link } from 'react-router-dom';
-import Products from './Products';
+import { matchProducts } from './Products';
 
 const cards = [
   {
@@ -26,12 +26,12 @@ const cards = [
   },
 ];
 
-const Card = ({ title, copy, button }) => (
+const Card = ({ title, copy, button,setProducts }) => (
     <div className={styles.card}>
       <div className={styles.content}>
         <h2 className={styles.title}>{title}</h2>
         <p className={styles.copy}>{copy}</p>
-        <button className={styles.btn}>  <Link to="/products">{button}</Link> </button>
+        <button className={styles.btn}  onClick={() =>matchProducts({product_type: title},setProducts)}>  <Link to="/products">{button}</Link> </button>
       </div>
     </div>
 );

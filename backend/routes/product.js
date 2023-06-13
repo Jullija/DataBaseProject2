@@ -106,6 +106,7 @@ productRouter.patch('/:productId', async (request, response) => {
 });
 
 productRouter.get('/sort', async (request, response) => {
+    console.log(request.query);
     const strategy = request.query;
 
     if (!strategy) {
@@ -117,6 +118,26 @@ productRouter.get('/sort', async (request, response) => {
         const productsCollection = db.collection('Products');
 
         const products = await productsCollection.find().sort(strategy).toArray();
+        response.json(products);
+    } catch (err) {
+        console.error(err);
+        response.status(500).send('Error connecting to the database');
+    }
+
+});
+productRouter.get('/match', async (request, response) => {
+    console.log(request.query);
+    const strategy = JSON.parse(request.query.strategy);
+
+    if (!strategy) {
+        response.status(400).send('You must provide an object to update the product');
+        return;
+    }
+    try {
+        const db = client.db('BitShop');
+        const productsCollection = db.collection('Products');
+        const products = await productsCollection.find(strategy).toArray();
+        console.log(products);
         response.json(products);
     } catch (err) {
         console.error(err);

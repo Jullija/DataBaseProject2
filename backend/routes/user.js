@@ -180,6 +180,8 @@ usersRouter.post('/purchase/:userId', async (request, response) => {
         };
 
         const result = await purchasesCollection.insertOne(purchase);
+        console.log(result);
+        console.log(result.ops[0]);
         response.status(201).json(result.ops[0]);
     } catch (err) {
         console.error(err);
