@@ -13,6 +13,10 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+
+  
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -100,6 +104,7 @@ const sortPrice = async (strategy) => {
   };
 
 
+
   return (
     <div className={styles['product']}>
       <h1>Products</h1>
@@ -107,12 +112,22 @@ const sortPrice = async (strategy) => {
       <div className={styles['product-header']}>
       <button className={styles2['button']}  onClick={() =>sortPrice({product_price:1})}>Low Price</button>
       <button className={styles2['button']}  onClick={() =>sortPrice({product_price:-1})}>High Price</button>
-      <button className={styles2['button']}>Available</button>
+      <button className={styles2['button']}  onClick={() =>matchProducts({product_quantity:{$gt:0}},setProducts)}>Available</button>
       </div>
       <div className={styles['products-container']}>{renderContent()}</div>
     </div>
   );
 };
 
+const matchProducts = async (strategy,setProducts) => {
+  const response = await axios.get('/api/products/match', {  params: {
+    strategy: JSON.stringify(strategy)
+  }});
+  console.log(response.data);
+  setProducts(response.data);
+  
+};
+
 export default Products;
+export { matchProducts };
 
