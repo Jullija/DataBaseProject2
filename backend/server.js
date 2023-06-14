@@ -240,7 +240,6 @@ app.get('/api/users/current', async (request, response) => {
 });
 
 //logout
-
 app.post('/api/users/logout', (request, response) => {
     if (!request.session.userId) {
         response.status(400).send('No user is currently logged in');

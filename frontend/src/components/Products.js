@@ -66,7 +66,7 @@ const Products = () => {
     }
   };
 
-  const buyProduct = async (productId, changeInQuantity) => {
+  const addToCart = async (productId, changeInQuantity) => {
     try {
       await updateProductQuantity(productId, changeInQuantity);
       const user = await getCurrentUser();
@@ -87,7 +87,7 @@ const Products = () => {
       return <div className={styles['loading']}>An error occurred while fetching products. Please try again.</div>;
     }
     return products.map((product) => (
-      <Product key={product._id} product={product} onRemove={removeProduct} onBuy={buyProduct} />
+      <Product key={product._id} product={product} onRemove={removeProduct} onBuy={addToCart} />
     ));
   };
 
